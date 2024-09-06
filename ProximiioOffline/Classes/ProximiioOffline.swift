@@ -77,9 +77,9 @@ public final class ProximiioOffline {
                     }
                     try await server.waitUntilListening()
                     let address = await self.getAddress()
-                    // _ = await self.sync()
                     self.setupProximiioAPI(address)
                     initSyncTimer()
+                    _ = await self.sync()
                     continuation.resume(returning: true)
                 }
             } catch {
