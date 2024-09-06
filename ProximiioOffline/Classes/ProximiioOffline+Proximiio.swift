@@ -13,5 +13,6 @@ extension ProximiioOffline {
         ProximiioAPI.sharedManager()?.setApi(address)
         ProximiioAPI.sharedManager()?.setApiVersion("v5")
         ProximiioMapStyle.cs_deleteFromDB(withCondition: "")
+        Proximiio.sharedInstance().auth(withToken: self.token) { _ in }
     }
 }

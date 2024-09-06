@@ -51,41 +51,33 @@ public final class ProximiioOffline {
 
     
     public func start(_ token: String) async -> Bool {
-        return await withCheckedContinuation { continuation in
-            self.token = token
-            do {
-                // Prepare directory structure
-                checkAndPrepare()
-                
-                // Dispose of collected data
-                try flush()
-                
-                if (getLastSync() == 0) {
-                    // Spawn database records from included files on first run
-                    try packageManager.preload()
-                    try geoManager.preload()
-                }
-                
-                // Prepare JSON cache
-                try packageManager.build()
-                try geoManager.build()
-                
-                Task {
-                    await add_routes(server)
-                    self.serverTask = Task {
-                        try await server.start()
-                    }
-                    try await server.waitUntilListening()
-                    let address = await self.getAddress()
-                    self.setupProximiioAPI(address)
-                    initSyncTimer()
-                    _ = await self.sync()
-                    continuation.resume(returning: true)
-                }
-            } catch {
-                continuation.resume(returning: false)
-            }
-        }
+        self.token = token
+            
+		// Prepare directory structure
+		checkAndPrepare()
+		
+		// Dispose of collected data
+		try flush()
+		
+		if (getLastSync() == 0) {
+			// Spawn database records from included files on first run
+			try packageManager.preload()
+			try geoManager.preload()
+		}
+		
+		// Prepare JSON cache
+		try packageManager.build()
+		try geoManager.build()
+		
+		await add_routes(server)
+		
+		Task {
+			try await server.start()
+		}
+		try await server.waitUntilListening()
+		let address = await self.getAddress()
+		self.setupProximiioAPI(address)
+		initSyncTimer()
     }
     
     func socketToString(addr: Socket.Address?) -> String {
