@@ -16,7 +16,7 @@ extension ProximiioOffline {
         timer!.schedule(deadline: .now(), repeating: .seconds(Int(syncInterval)))
         timer!.setEventHandler { [weak self] in
             Task { @MainActor in
-                await self?.sync()
+                _ = await self?.sync()
             }
         }
         

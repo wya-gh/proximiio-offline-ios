@@ -50,7 +50,7 @@ public final class ProximiioOffline {
     }
 
     
-    public func start(_ token: String) async -> Bool {
+    public func start(_ token: String) async throws {
         self.token = token
             
 		// Prepare directory structure
