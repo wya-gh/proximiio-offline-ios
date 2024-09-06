@@ -70,15 +70,15 @@ public final class ProximiioOffline {
                 try packageManager.build()
                 try geoManager.build()
                 
-                let task = Task {
+                Task {
                     await add_routes(server)
                     self.serverTask = Task {
                         try await server.start()
                     }
                     try await server.waitUntilListening()
                     let address = await self.getAddress()
-                    await self.sync()
-                    let result = await self.initProximiio(address)
+                    // _ = await self.sync()
+                    self.setupProximiioAPI(address)
                     initSyncTimer()
                     continuation.resume(returning: true)
                 }
